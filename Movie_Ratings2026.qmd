@@ -1,0 +1,21 @@
+---
+title: "Movie Ratings"
+author: "Jess Chen"
+format: gfm
+editor: visual
+---
+
+## Approach
+
+With the Oscars coming up in March, my partner and I have been trying to watch nominated movies ahead of the awards. I'd like to do a survey among friends to see what movies they have seen and what they thought. I certainly have a favorite so far and want to see if others agree!
+
+### Process steps
+
+1.  Create a survey file (probably google sheet) of best picture nominees: <https://www.oscars.org/oscars/ceremonies/2026>
+2.  Collect results
+3.  Setup PostgreSQL and create database
+4.  Upload SQL database into R
+
+### Challenges
+
+I anticipate there could be challenges in setting up an SQL database (which I will leverage LLM and possibly ask questions on class slack channel). I foresee missing ratings to be a challenge given some of the movies are a bit harder to find and given the small data size, might be difficult to assess. I will add an N/A column, consider limiting to most popular movies and perhaps using ratios instead of actual totals.
