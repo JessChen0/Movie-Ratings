@@ -43,9 +43,22 @@ movie_ratings_2026 %>% group_by(movie_name) %>%
   arrange(desc(average_score)) %>%
   kable(caption = "2026 Oscar nominated movie ratings...according to us!")
 
+movie_ratings_2026 %>% group_by(user_id) %>%
+  summarize(average_score = mean(score, na.rm=TRUE)) %>%
+  arrange(desc(average_score)) %>%
+  kable(caption = "Ratings by individual")
+
+movie_ratings_2026 %>% group_by(user_id) %>%
+  summarize(missing_rating = sum(is.na(score))) %>%
+  kable(caption = "Missing ratings by user")
+
 ```
 
-To conclude, Sinners is the favorite among those surveyed, though Marty Supreme came very close.
+
+To conclude, Sinners is the favorite among those surveyed, though Marty Supreme came very close.  And Levi gave the highest average score while Celia was the toughest scorer.  
+
+A caveat that a few individuals did not rate the movies they have not seen.  Given the tight distribution of final ratings, it is important to note that final results could be different if all movies have been seen by all individuals.
+
 
 ## References
 
