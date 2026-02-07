@@ -1,21 +1,80 @@
 ---
-title: "Movie Ratings"
+title: "Oscar 2026 Personal Movie Ratings"
 author: "Jess Chen"
 format: gfm
 editor: visual
 ---
 
-## Approach
+## Introduction
 
-With the Oscars coming up in March, my partner and I have been trying to watch nominated movies ahead of the awards. I'd like to do a survey among friends to see what movies they have seen and what they thought. I certainly have a favorite so far and want to see if others agree!
+With the Oscars coming up in March, my partner and I have been trying to watch nominated movies ahead of the awards. I'd like to do a survey among friends to see what they thought of the nominated movies that we have seen so far. For this project, I used google sheets to create a quick survey to circulate among friends, create a database using pgAdmin to store this data, then download and reloaded it to Rstudio for analysis.
 
-### Process steps
+## Workflow
 
-1.  Create a survey file (probably google sheet) of best picture nominees: <https://www.oscars.org/oscars/ceremonies/2026>
-2.  Collect results
-3.  Setup PostgreSQL and create database
-4.  Upload SQL database into R
+### Data Collection
 
-### Challenges
+To simplify data collection, I created a simple [google sheet](https://docs.google.com/spreadsheets/d/13pidKQuE8tIt0_-B57gCp1W72maQ1-3TTjPSo2IqIBE/edit?usp=sharing) and circulated it around to select individuals.
 
-I anticipate there could be challenges in setting up an SQL database (which I will leverage LLM and possibly ask questions on class slack channel). I foresee missing ratings to be a challenge given some of the movies are a bit harder to find and given the small data size, might be difficult to assess. I will add an N/A column, consider limiting to most popular movies and perhaps using ratios instead of actual totals.
+### Data Input & Storage
+
+Per assignment directions, I created three tables using *pgAdmin 4* to store the collected information. Table 1, movies, consisted of movie_names. Table 2, users, consisted of user_ids. And finally, table 3, ratings, contained the assessed score while joining tables 1 and 2 using \# ids.
+
+Once the tables were joined, I downloaded the document as a csv to be loaded into R. SQL codes for this process are included in the last section of this document.
+
+### Data Analysis
+
+The data file was uploaded into github and then downloaded into R.
+
+```{r}
+library(tidyverse)
+library(knitr)
+
+movie_ratings_2026 <- read.csv("https://raw.githubusercontent.com/JessChen0/Movie-Ratings/refs/heads/main/oscar_2026_ratings.csv")
+
+glimpse(movie_ratings_2026)
+```
+
+```{r}
+movie_ratings_2026 <- movie_ratings_2026 %>%
+ mutate(score = as.numeric(score))
+
+movie_ratings_2026 %>% group_by(movie_name) %>%
+  summarize(average_score = mean(score, na.rm=TRUE)) %>%
+  arrange(desc(average_score)) %>%
+  kable(caption = "2026 Oscar nominated movie ratings...according to us!")
+
+```
+
+To conclude, Sinners is the favorite among those surveyed, though Marty Supreme came very close.
+
+## References
+
+Google DeepMind. (2025). Gemini 3 Flash \[Large language model\]. https://gemini.google.com. Accessed Feb 7, 2026.  (public link: <https://gemini.google.com/share/83285c6bd8f5> and <https://gemini.google.com/share/e41e877a84e3>)
+
+## Code
+
+Please find SQL code to store ratings results below:
+
+> CREATE TABLE movies ( id SERIAL PRIMARY KEY, movie_name VARCHAR(255) );}
+>
+> INSERT INTO movies (movie_name) VALUES ('Marty Supreme'), ('Bugonia'), ('Sinners'), ('One Battle After Another'), ('Frankenstein'), ('F1');
+>
+> CREATE TABLE users ( id SERIAL PRIMARY KEY, user_id VARCHAR(255) );
+>
+> INSERT INTO users (user_id) VALUES ('Jess'), ('AJ'), ('Celia'), ('Nola'), ('Levi');
+>
+> CREATE TABLE ratings ( id SERIAL PRIMARY KEY, movie_name INT REFERENCES movies(id), user_id INT REFERENCES users(id), score NUMERIC(3,1) );
+>
+> INSERT INTO ratings (movie_name, user_id, score) VALUES (1,1,NULL), (2,1,3), (3,1,5), (4,1,4), (5,1,3), (6,1,NULL);
+>
+> INSERT INTO ratings (movie_name, user_id, score) VALUES (1,2,3.75), (2,2,3), (3,2,5), (4,2,3.75), (5,2,4), (6,2,NULL);
+>
+> INSERT INTO ratings (movie_name, user_id, score) VALUES (1,3,3), (2,3,3), (3,3,NULL), (4,3,3), (5,3,3), (6,3,3);
+>
+> INSERT INTO ratings (movie_name, user_id, score) VALUES (1,4,4), (2,4,3), (3,4,4), (4,4,3), (5,4,4), (6,4,2);
+>
+> INSERT INTO ratings (movie_name, user_id, score) VALUES (1,5,5), (2,5,NULL), (3,5,4), (4,5,3), (5,5,4), (6,5,5);
+>
+> SELECT \* FROM ratings;
+>
+> SELECT movies.movie_name, users.user_id, ratings.score FROM ratings JOIN movies ON ratings.movie_name = movies.id JOIN users ON ratings.user_id = users.id;
