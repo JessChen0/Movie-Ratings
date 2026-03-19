@@ -5,7 +5,7 @@ format: gfm
 editor: visual
 ---
 
-## Introduction
+## Introduction - Version 2
 
 With the Oscars coming up in March, my partner and I have been trying to watch nominated movies ahead of the awards. I'd like to do a survey among friends to see what they thought of the nominated movies that we have seen so far. For this project, I used google sheets to create a quick survey to circulate among friends, create a database using pgAdmin to store this data, then download and reloaded it to Rstudio for analysis.
 
@@ -54,11 +54,9 @@ movie_ratings_2026 %>% group_by(user_id) %>%
 
 ```
 
+To conclude, Sinners is the favorite among those surveyed, though Marty Supreme came very close. And Levi gave the highest average score while Celia was the toughest scorer.
 
-To conclude, Sinners is the favorite among those surveyed, though Marty Supreme came very close.  And Levi gave the highest average score while Celia was the toughest scorer.  
-
-A caveat that a few individuals did not rate the movies they have not seen.  Given the tight distribution of final ratings, it is important to note that final results could be different if all movies have been seen by all individuals.
-
+A caveat that a few individuals did not rate the movies they have not seen. Given the tight distribution of final ratings, it is important to note that final results could be different if all movies have been seen by all individuals.
 
 ## References
 
